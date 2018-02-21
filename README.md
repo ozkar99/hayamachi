@@ -23,20 +23,22 @@ or add in Gemfile:
 require 'hayamichi'
 
 # instantiate with the form action on offsite
-shortcut = Hayamichi.new('https://offsiteform/action')
+hm = Hayamichi.new('https://offsiteform/action')
 
 # add hash with form data
-shortcut.data = {
+hm.data = {
   name: 'John',
   lastname: 'Smith',
   age: 28
 }
 
-response = shortcute.submit
+response = hm.submit
 
 response.success # boolean containing status result
 response.url # url to redirect
 response.data # hash containing values of the query
+
+response.response # raw net/http response object
 ```
 
 
