@@ -1,4 +1,4 @@
-module Hayamachi
+module Hayamichi
   class Response
     attr_accessor :status, :url, :data
 

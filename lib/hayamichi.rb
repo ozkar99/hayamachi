@@ -1,6 +1,6 @@
 require_relative 'hayamachi_response'
 
-class Hayamachi
+class Hayamichi
   attr_accessor :endpoint, :method
 
   ALLOWED_METHODS = [:get, :post]

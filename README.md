@@ -15,7 +15,7 @@ Think of pay-pal offsite payments or oAuth.
 
 or add in Gemfile:  
 
-`gem 'hayamachi'` 
+`gem 'hayamichi'` 
 
 ### Usage:
 
