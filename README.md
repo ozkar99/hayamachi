@@ -34,7 +34,7 @@ hm.data = {
 
 response = hm.submit
 
-response.success # boolean containing status result
+response.success # boolean containing status result of operation (NOT HTTP STATUS)
 response.url # url to redirect
 response.data # hash containing values of the query
 
@@ -45,7 +45,7 @@ response.response # raw net/http response object
 You can also specify if the submision method for the form in the constructor like:
 
 ```ruby
-shortcut = Hayamichi.new('https://offsiteform/action', method: :get)
+hm = Hayamichi.new('https://offsiteform/action', method: :get)
 ```
 
 default value is :post, only methods allowed are :post and :get
