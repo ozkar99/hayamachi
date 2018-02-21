@@ -6,25 +6,23 @@ class Hayamichi
     attr_reader :status, :url, :data, :response
 
     def initialize(response)
-      @status, @url, @data = false, '', {}
+      @success, @url, @data = false, '', {}
       @response = response # raw response
 
       raise INVALID_RESPONSE_ERROR unless @response.respond_to? :status
 
-      # parse status here then is success
       case response
-        when Net::HTTPSuccess then
-          @status = true
         when Net::HTTPRedirection then
-          @status = true
           redirect = response['location']
           if redirect != ''
+            @success = true
+            
             uri = URI redirect
             @url = url_from_uri uri
             @data = URI.decode_www_form(uri.query).to_h
           end
         else
-          @status = false
+          @success = false
         end
       end
 
