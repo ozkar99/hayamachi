@@ -1,18 +1,36 @@
-require_relative 'hayamachi_response'
+require_relative 'hayamichi_constants'
+require_relative 'hayamichi_response'
+
+require 'uri'
 
 class Hayamichi
-  attr_accessor :endpoint, :method
+  attr_accessor :uri, :method
+  attr_reader :data
 
-  ALLOWED_METHODS = [:get, :post]
-
-  def initialize(endpoint, hash)
-    @endpoint = endpoint
-    @method = hash[:method] || :post
-
-    raise "Unsupported method, only :post or :get allowed" unless ALLOWED_METHODS.include? @method
+  def initialize(uri, hash = { method: :post })
+    @uri = uri
+    raise INVALID_URI_ERROR unless @uri =~ URI::regexp
+    
+    @method = hash[:method]
+    raise INVALID_METHOD_ERROR unless ALLOWED_METHODS.include? @method
   end
 
   def submit
-    puts "I am submitting~" 
+    raise DATA_NIL_ERROR if @data.nil?
+
+    if @method == POST
+      post
+    else
+      get
+    end
   end
+
+  def data=(data)
+    @data = URI.encode_www_form data
+  end
+
+  private
+  def post;end
+
+  def get;end
 end
