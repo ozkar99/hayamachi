@@ -2,14 +2,15 @@ require_relative 'hayamichi_constants'
 require_relative 'hayamichi_response'
 
 require 'uri'
+require 'net/http'
 
 class Hayamichi
-  attr_accessor :uri, :method
+  attr_accessor :uri, :method, :data
   attr_reader :data
 
   def initialize(uri, hash = { method: :post })
-    @uri = uri
-    raise INVALID_URI_ERROR unless @uri =~ URI::regexp
+    raise INVALID_URI_ERROR unless uri =~ URI::regexp
+    @uri = URI(uri)
     
     @method = hash[:method]
     raise INVALID_METHOD_ERROR unless ALLOWED_METHODS.include? @method
@@ -19,18 +20,17 @@ class Hayamichi
     raise DATA_NIL_ERROR if @data.nil?
 
     if @method == POST
-      post
+      response = Net::HTTP.post_form @uri, @data
     else
-      get
+      uri = uri_for_get @uri, @data 
+      response = Net::HTTP.get uri
     end
-  end
 
-  def data=(data)
-    @data = URI.encode_www_form data
+    Response.new(response)
   end
 
   private
-  def post;end
-
-  def get;end
+  def uri_for_get uri, data
+    parsed = URI(uri)
+  end
 end

@@ -1,19 +1,36 @@
+require 'net/http'
+require 'uri'
+
 class Hayamichi
   class Response
-    attr_reader :status, :url, :data
+    attr_reader :status, :url, :data, :response
 
-    def initialize(http_response)
-      @status = false
-      @url = ""
-      @data = {}
+    def initialize(response)
+      @status, @url, @data = false, '', {}
+      @response = response # raw response
 
-      raise INVALID_RESPONSE_ERROR
-      # parse status here if its (301/302) then is success
+      raise INVALID_RESPONSE_ERROR unless @response.respond_to? :status
 
-      # get url from http response
+      # parse status here then is success
+      case response
+        when Net::HTTPSuccess then
+          @status = true
+        when Net::HTTPRedirection then
+          @status = true
+          redirect = response['location']
+          if redirect != ''
+            uri = URI redirect
+            @url = url_from_uri uri
+            @data = URI.decode_www_form(uri.query).to_h
+          end
+        else
+          @status = false
+        end
+      end
 
-      # get query data from url
-    end
-
+      private
+      def url_from_uri uri
+        "#{uri.scheme}://#{uri.host}#{uri.path}"
+      end
   end
 end

@@ -46,12 +46,4 @@ RSpec.describe Hayamichi do
             expect(hm.method).to eq(:post)
         end
     end
-
-    context "when data is set" do
-        it "should parse @data into correct query" do
-            hm = valid_hm
-            hm.data = hm_data
-            expect(hm.data).to eq('name=namerino&email=test%40gmail.com')
-        end
-    end
 end
